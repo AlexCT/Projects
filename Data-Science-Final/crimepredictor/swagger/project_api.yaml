@@ -1,0 +1,54 @@
+swagger: '2.0'
+info:
+  title: SPD Call Data Classification API
+  version: "0.1"
+  description: An API that can returns the 5 most probably crimes to occur in a given location at the given time
+
+paths:
+  /health:
+    get:
+      summary: Checks the health of the service
+      description: Returns the health status of the service
+      operationId: project_api.health
+      responses:
+        '200':
+          description: Service is healthy
+        '500':
+          description: Service is unhealthy
+
+  /predict:
+    post:
+      summary: Entrypoint to our prediction function
+      operationId: project_api.predict
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+        - in: formData
+          name: beat
+          required: true
+          description: Location (SPD Beat)
+          type: number
+        - in: formData
+          name: hour
+          required: true
+          description: Time (Hour from 0-23)
+          type: number
+        - in: formData
+          name: day
+          required: true
+          description: Day (Monday = 0, Sunday = 6)
+          type: number
+        - in: formData
+          name: month
+          required: true
+          description: Month (1-12)
+          type: number
+      responses:
+        '200':
+          description: Classification performed successfully
+        '400':
+          description: Bad Request
+        '500':
+          description: Unable to perform the classification
